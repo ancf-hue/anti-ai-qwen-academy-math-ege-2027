@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Анти-ИИ Квен Академия | Математика ЕГЭ-2027</title>
+  <meta name="description" content="Бесплатный офлайн-тренажёр и чек-лист для подготовки к ЕГЭ по математике 2027: базовый и профильный уровни, демоверсия, кодификатор, спецификация ФИПИ, честная проверка ответов, таймер, план на 25 дней." />
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #070b18;
+      --card: rgba(18, 26, 51, 0.72);
+      --card-soft: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #e8ecff;
+      --muted: #9aa4c8;
+      --accent: #22d3ee;
+      --violet: #7c3aed;
+      --green: #22c55e;
+      --red: #ef4444;
+      --orange: #f59e0b;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.18), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    .container { width: min(1120px, 92%); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 11, 24, 0.82);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 0; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo {
+      width: 46px; height: 46px; border-radius: 15px; object-fit: cover;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 12px 30px rgba(34, 211, 238, 0.18);
+      flex: 0 0 auto;
+    }
+    .brand strong { display: block; font-size: 16px; line-height: 1.2; }
+    .brand small { color: var(--muted); font-size: 12px; }
+    nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a { color: #cfd6ff; text-decoration: none; font-weight: 700; font-size: 14px; }
+    nav a:hover { color: white; }
+    .top-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-left: auto; }
+    .level-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted); border-radius: 999px; padding: 8px 14px;
+      font-weight: 850; cursor: pointer; transition: 0.15s ease;
+      font-size: 13px;
+    }
+    .level-btn:hover { background: rgba(255, 255, 255, 0.12); }
+    .level-option { opacity: 0.65; }
+    .level-option.active { opacity: 1; color: white; }
+    .level-sep { opacity: 0.45; }
+    .timer-widget {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px; padding: 6px 8px;
+    }
+    .timer-widget select {
+      background: rgba(7, 11, 24, 0.55); color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px; padding: 6px 8px; font: inherit;
+      font-size: 12px; max-width: 180px;
+    }
+    #timerDisplay {
+      font-variant-numeric: tabular-nums; font-weight: 900;
+      min-width: 88px; text-align: center; color: white;
+    }
+    .timer-btn {
+      border: 0; background: rgba(255, 255, 255, 0.08); color: var(--text);
+      border-radius: 10px; padding: 6px 9px; cursor: pointer;
+      font-size: 14px; transition: 0.15s ease;
+    }
+    .timer-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .timer-widget.warning #timerDisplay { color: var(--orange); }
+    .timer-widget.danger #timerDisplay { color: var(--red); animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+    .hero {
+      display: grid; grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px; padding: 48px 0 28px; align-items: start;
+    }
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 8px 12px; border-radius: 999px;
+      background: rgba(124, 58, 237, 0.18);
+      border: 1px solid rgba(124, 58, 237, 0.35);
+      color: #d8ccff; font-size: 13px; font-weight: 700;
+    }
+    h1 { font-size: clamp(34px, 5vw, 58px); line-height: 1.05; margin: 16px 0; }
+    h1 .accent { color: var(--accent); }
+    .lead { color: #b8c1e6; max-width: 72ch; font-size: 17px; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+    .btn {
+      border: 0; border-radius: 14px; padding: 14px 18px;
+      font-weight: 850; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      background: linear-gradient(135deg, var(--violet), var(--accent));
+      color: white; box-shadow: 0 12px 30px rgba(34, 211, 238, 0.18);
+      font-size: 15px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #eaf0ff; box-shadow: none;
+    }
+    .btn.small { padding: 10px 14px; font-size: 14px; border-radius: 12px; }
+    .panel {
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.16), rgba(6, 182, 212, 0.10));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px; padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .panel h3 { margin: 0 0 14px; font-size: 20px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .metric {
+      background: rgba(7, 11, 24, 0.35); border-radius: 16px;
+      padding: 14px; border: 1px solid rgba(255, 255, 255, 0.08);
+      min-height: 82px;
+    }
+    .metric strong { display: block; font-size: 22px; color: white; margin-bottom: 4px; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    progress {
+      width: 100%; height: 10px; border-radius: 999px;
+      overflow: hidden; appearance: none;
+      background: rgba(255, 255, 255, 0.1); border: none; margin-top: 10px;
+    }
+    progress::-webkit-progress-bar { background: rgba(255, 255, 255, 0.1); border-radius: 999px; }
+    progress::-webkit-progress-value { background: linear-gradient(90deg, var(--violet), var(--accent)); border-radius: 999px; }
+    progress::-moz-progress-bar { background: var(--accent); border-radius: 999px; }
+    .note { color: var(--muted); font-size: 13px; margin-top: 12px; }
+
+    section { padding: 28px 0; }
+    .section-head {
+      display: flex; justify-content: space-between;
+      align-items: end; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;
+    }
+    h2 { font-size: clamp(26px, 3vw, 36px); margin: 0; line-height: 1.15; }
+    .sub { color: var(--muted); margin: 6px 0 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 22px; padding: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 20px; }
+    .card p { color: #b8c1e6; margin: 0 0 16px; }
+    .warn-card { border-color: rgba(245, 158, 11, 0.35); background: linear-gradient(180deg, rgba(245, 158, 11, 0.10), rgba(18, 26, 51, 0.72)); }
+    .danger-card { border-color: rgba(239, 68, 68, 0.35); background: linear-gradient(180deg, rgba(239, 68, 68, 0.10), rgba(18, 26, 51, 0.72)); }
+    .success-card { border-color: rgba(34, 197, 94, 0.35); background: linear-gradient(180deg, rgba(34, 197, 94, 0.10), rgba(18, 26, 51, 0.72)); }
+    .tag {
+      display: inline-block; padding: 6px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 850; margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #dbe3ff;
+    }
+    .tag.red { background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.35); color: #ffd7d7; }
+    .tag.green { background: rgba(34, 197, 94, 0.14); border-color: rgba(34, 197, 94, 0.35); color: #d7ffe6; }
+    .tag.orange { background: rgba(245, 158, 11, 0.14); border-color: rgba(245, 158, 11, 0.35); color: #fff0cc; }
+    .mini-list { margin: 0; padding-left: 18px; color: #c8d2f5; }
+    .mini-list li { margin: 7px 0; }
+
+    .question-block {
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 24px; padding: 24px; margin-bottom: 26px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+    .q-number {
+      display: inline-block; padding: 6px 12px; border-radius: 999px;
+      background: rgba(124, 58, 237, 0.22);
+      border: 1px solid rgba(124, 58, 237, 0.45);
+      color: #d8ccff; font-size: 13px; font-weight: 850; margin-bottom: 14px;
+    }
+    .q-part { margin-bottom: 18px; }
+    .q-part-label {
+      display: inline-block; font-size: 12px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .q-text {
+      font-size: 17px; font-weight: 700; margin: 0;
+      line-height: 1.5; color: #eaf0ff; white-space: pre-wrap;
+    }
+    .q-info {
+      background: rgba(124, 58, 237, 0.10);
+      border-left: 4px solid var(--violet);
+      border-radius: 0 14px 14px 0;
+      padding: 16px 18px; margin: 18px 0;
+      color: #dbe3ff; font-size: 15px; line-height: 1.55; white-space: pre-wrap;
+    }
+    .q-info strong { color: #ffffff; }
+    .q-trainer-label {
+      display: inline-block; font-size: 12px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .answer-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .answer-input {
+      flex: 1; min-width: 220px;
+      background: rgba(7, 11, 24, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text); border-radius: 14px;
+      padding: 14px 16px; font: inherit; font-size: 16px;
+    }
+    .answer-input:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+    }
+    .answer-input.correct { border-color: rgba(34, 197, 94, 0.65); background: rgba(34, 197, 94, 0.12); }
+    .answer-input.wrong { border-color: rgba(239, 68, 68, 0.65); background: rgba(239, 68, 68, 0.12); }
+    .options { display: grid; gap: 10px; }
+    .option {
+      text-align: left; width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text); border-radius: 14px;
+      padding: 14px 16px; cursor: pointer; font-size: 15px;
+      transition: 0.15s ease; white-space: pre-wrap;
+    }
+    .option:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+    .option.selected { background: rgba(34, 211, 238, 0.16); border-color: rgba(34, 211, 238, 0.55); }
+    .option:disabled { cursor: default; }
+    .result-block { margin-top: 14px; padding: 14px 16px; border-radius: 14px; }
+    .result-block.correct { background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.35); }
+    .result-block.wrong { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); }
+    .result-block.neutral { background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.35); }
+    .verdict { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+    .verdict.correct { color: #22c55e; }
+    .verdict.wrong { color: #ef4444; }
+    .verdict.neutral { color: var(--accent); }
+    .result-row { margin: 6px 0; color: #d7e6ff; font-size: 15px; }
+    .result-row strong { color: #ffffff; }
+    .source-row {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.18);
+      color: var(--muted); font-size: 13px;
+    }
+    .source-row strong { color: #dbe3ff; }
+    .summary {
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.14), rgba(18, 26, 51, 0.72));
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      border-radius: 24px; padding: 24px; text-align: center; margin-top: 24px;
+    }
+    .summary .score { font-size: 48px; font-weight: 950; color: #fff; }
+    .reset-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; justify-content: flex-end; }
+
+    .checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .check-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--card-soft); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px; transition: 0.15s ease;
+    }
+    .check-item input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: 0 0 auto; }
+    .check-item label { cursor: pointer; color: #dbe3ff; }
+    .check-item.done { opacity: 0.72; background: rgba(34, 211, 238, 0.08); border-color: rgba(34, 211, 238, 0.25); }
+    .check-item.done label { text-decoration: line-through; color: #aab5dc; }
+
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .day {
+      background: var(--card-soft); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; min-height: 112px;
+    }
+    .day b { display: block; color: var(--accent); margin-bottom: 6px; font-size: 14px; letter-spacing: 0.2px; }
+    .day.critical { border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.08); }
+
+    .support-card {
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.18), rgba(34, 211, 238, 0.10));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 24px; padding: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .support-card h2 { margin-bottom: 10px; }
+    .support-card p { margin: 10px 0; color: #dbe3ff; }
+    .phone { color: white; font-weight: 900; text-decoration: none; border-bottom: 1px dashed rgba(255, 255, 255, 0.45); }
+    .phone:hover { color: var(--accent); }
+    .copy-status { margin-left: 8px; color: var(--green); font-weight: 850; }
+    .support-card a { color: var(--accent); font-weight: 800; text-decoration: none; }
+    .support-card a:hover { text-decoration: underline; }
+
+    footer {
+      padding: 30px 0 50px; color: var(--muted);
+      text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 30px;
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      nav { gap: 12px; }
+      .top-controls { width: 100%; justify-content: space-between; }
+      .timer-widget select { max-width: 140px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">
+        <img src="favicon.ico" class="brand-logo" alt="Anti-AI Qwen Academy Logo" onerror="this.style.display='none'" />
+        <div>
+          <strong>Анти-ИИ Квен Академия</strong>
+          <small>Математика ЕГЭ-2027 · базовый и профильный</small>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#structure">Структура</a>
+        <a href="#changes">Изменения 2027</a>
+        <a href="#criteria">Критерии</a>
+        <a href="#trainer">Тренажёр</a>
+        <a href="#checklist">Чек-лист</a>
+        <a href="#plan">25 дней</a>
+        <a href="#support">Поддержать</a>
+      </nav>
+
+      <div class="top-controls">
+        <button id="levelToggle" class="level-btn" type="button" aria-label="Switch exam level">
+          <span class="level-option active" data-level="base">Базовый</span>
+          <span class="level-sep">/</span>
+          <span class="level-option" data-level="prof">Профильный</span>
+        </button>
+
+        <div class="timer-widget" id="timerWidget" role="group" aria-label="Exam Timer">
+          <select id="timerPreset" aria-label="Timer Preset"></select>
+          <span id="timerDisplay">03:00:00</span>
+          <button id="timerToggle" class="timer-btn" type="button">▶</button>
+          <button id="timerReset" class="timer-btn" type="button">↺</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="badge" id="heroBadge"></span>
+
+        <h1 id="heroTitle"></h1>
+
+        <p class="lead" id="heroLead"></p>
+
+        <div class="actions">
+          <button class="btn" onclick="scrollToId('trainer')">Пройти тренажёр</button>
+          <button class="btn secondary" onclick="scrollToId('structure')">Структура экзамена</button>
+          <button class="btn secondary" onclick="scrollToId('criteria')">Критерии и баллы</button>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <h3>Быстрая статистика</h3>
+
+        <div class="metrics">
+          <div class="metric">
+            <strong id="answeredCount">0/21</strong>
+            <span id="answeredLabel">блоков пройдено</span>
+          </div>
+          <div class="metric">
+            <strong id="correctCount">0/21</strong>
+            <span id="correctLabel">верных ответов</span>
+          </div>
+          <div class="metric">
+            <strong id="checklistProgress">0%</strong>
+            <span>чек-лист</span>
+          </div>
+        </div>
+
+        <progress id="overall" value="0" max="100"></progress>
+        <p class="note">Ответы и чек-лист сбрасываются при каждом открытии страницы и при смене уровня.</p>
+      </aside>
+    </section>
+
+    <section id="structure">
+      <div class="section-head">
+        <div>
+          <h2>Структура ЕГЭ по математике</h2>
+          <p class="sub" id="structureSub"></p>
+        </div>
+      </div>
+
+      <div class="grid" id="structureGrid"></div>
+    </section>
+
+    <section id="changes">
+      <div class="section-head">
+        <div>
+          <h2>Что обязательно учесть в ЕГЭ-2027</h2>
+          <p class="sub" id="changesSub"></p>
+        </div>
+      </div>
+
+      <div class="grid" id="changesGrid"></div>
+    </section>
+
+    <section id="criteria">
+      <div class="section-head">
+        <div>
+          <h2>Критерии и баллы: на что смотреть</h2>
+          <p class="sub" id="criteriaSub"></p>
+        </div>
+      </div>
+
+      <div class="grid" id="criteriaGrid"></div>
+    </section>
+
+    <section id="trainer">
+      <div class="section-head">
+        <div>
+          <h2 id="trainerTitle"></h2>
+          <p class="sub">
+            По каждому заданию: <strong>1) вопрос</strong> →
+            <strong>2) информация</strong> о том, что проверяет задание →
+            <strong>3) тренажёр</strong>.
+            Автоматически проверяются только задания с кратким ответом.
+          </p>
+        </div>
+      </div>
+
+      <p class="note" id="trainerNote"></p>
+
+      <div class="reset-bar">
+        <button class="btn secondary small" onclick="resetAll()">Сбросить все ответы</button>
+      </div>
+
+      <div id="quizContainer"></div>
+      <div id="summaryBox"></div>
+    </section>
+
+    <section id="checklist">
+      <div class="section-head">
+        <div>
+          <h2>Чек-лист подготовки к ЕГЭ-2027</h2>
+          <p class="sub">Отмечай выполненные пункты — при новом открытии страницы чек-лист сбросится.</p>
+        </div>
+      </div>
+
+      <ul class="checklist" id="checklistUl"></ul>
+    </section>
+
+    <section id="plan">
+      <div class="section-head">
+        <div>
+          <h2>Полный курс 25 дней</h2>
+          <p class="sub" id="planSub"></p>
+        </div>
+      </div>
+
+      <div class="plan-grid" id="planGrid"></div>
+    </section>
+
+    <section id="support">
+      <div class="support-card">
+        <h2>🤝 ПОДДЕРЖАТЬ ПРОЕКТ 💙</h2>
+        <p><strong>Приложение бесплатное. Было и останется.</strong></p>
+        <p>Все приложения бесплатны и без рекламы. Ваша помощь помогает развитию офлайн-безопасности и образования.</p>
+        <p>
+          <span>📱 ПЕРЕВОД ПО НОМЕРУ ТЕЛЕФОНА:</span>
+          <a class="phone" href="tel:89202275676">8-920-227-56-76</a>
+          <button class="btn small" onclick="copyPhone()">📋 Копировать номер</button>
+          <span id="copyStatus" class="copy-status" aria-live="polite"></span>
+        </p>
+        <p>✅ Деньги придут мгновенно. Без комиссии. Безопасно.</p>
+        <p>❤️ Спасибо за поддержку!</p>
+        <p>🌟 👉 <a href="https://ancf-hue.github.io/" target="_blank" rel="noopener noreferrer">Каталог бесплатных офлайн-приложений ANTI-AI SHIELD</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Анти-ИИ Квен Академия • Бесплатный HTML-проект • Математика ЕГЭ-2027 • Проект ФИПИ
+    </div>
+  </footer>
+
+  <script>
+    let currentLevel = "base";
+    let savedAnswers = {};
+    let checklistState = {};
+
+    const LEVELS = {
+      base: {
+        name: "Базовый уровень",
+        total: 21,
+        autoTotal: 21,
+        essayTotal: 0,
+        maxPrimary: 21,
+        minutes: 180,
+        badge: "Проект ФИПИ 2027 · Базовый уровень · 21 задание · 180 минут · 21 балл",
+        title: "Поможем сдать <span class=\"accent\">математику базовый</span> правильно",
+        lead: "Тренажёр составлен по проектам демоверсии, спецификации и кодификатора ЕГЭ-2027 по математике базового уровня. Все 21 задание — с кратким ответом. Ответом может быть целое число, конечная десятичная дробь или последовательность цифр. Максимальный первичный балл — 21. Время выполнения — 180 минут.",
+        structureSub: "Базовый уровень: 21 задание с кратким ответом, 180 минут, 21 первичный балл.",
+        changesSub: "По проекту спецификации: изменения структуры и содержания КИМ ЕГЭ-2027 по математике базового уровня по сравнению с 2026 годом отсутствуют.",
+        criteriaSub: "Каждое задание базового уровня оценивается 1 баллом. Максимум — 21 первичный балл.",
+        trainerTitle: "Тренажёр: 21 задание базового уровня",
+        trainerNote: "Использованы примеры из проекта демоверсии ФИПИ ЕГЭ-2027. Там, где в официальном варианте были рисунки или диаграммы, сделаны офлайн-адаптации с эквивалентными данными; это указано в источнике задания.",
+        planSub: "Маршрут подготовки по структуре базового ЕГЭ-2027."
+      },
+      prof: {
+        name: "Профильный уровень",
+        total: 20,
+        autoTotal: 13,
+        essayTotal: 7,
+        maxPrimary: 33,
+        minutes: 235,
+        badge: "Проект ФИПИ 2027 · Профильный уровень · 20 заданий · 235 минут · 33 балла",
+        title: "Поможем сдать <span class=\"accent\">математику профиль</span> правильно",
+        lead: "Тренажёр составлен по проектам демоверсии, спецификации и кодификатора ЕГЭ-2027 по математике профильного уровня. Часть 1 — 13 заданий с кратким ответом. Часть 2 — 7 заданий с развёрнутым ответом. Максимальный первичный балл — 33. Время выполнения — 235 минут. Задания 14–20 проверяются как самопроверка по критериям.",
+        structureSub: "Профильный уровень: 13 заданий с кратким ответом и 7 заданий с развёрнутым ответом, 235 минут, 33 первичных балла.",
+        changesSub: "В профильном КИМ ЕГЭ-2027 добавлены задание 6 (случайные величины), задание 13 (моделирование реальных ситуаций, финансы) и задание 17 (прикладная задача). Количество заданий выросло с 19 до 20, максимум баллов — с 32 до 33.",
+        criteriaSub: "Задания 1–13 — по 1 баллу. Задания 14, 16, 17 — по 2 балла; 15, 18 — по 3 балла; 19, 20 — по 4 балла. Максимум — 33 первичных балла.",
+        trainerTitle: "Тренажёр: 13 коротких + 7 развёрнутых",
+        trainerNote: "Задания 1–13 проверяются автоматически. Задания 14–20 — самопроверка по критериям: ты отмечаешь, сколько баллов реально заслуживает твоё решение. Использованы примеры из проекта демоверсии ФИПИ; для позиций с рисунками сделаны офлайн-адаптации.",
+        planSub: "Маршрут подготовки по структуре профильного ЕГЭ-2027."
+      }
+    };
+
+    const STRUCTURE_CARDS = {
+      base: [
+        {
+          tag: "Всего",
+          tagCls: "green",
+          cls: "success-card",
+          title: "21 задание",
+          list: [
+            "Все задания — с кратким ответом.",
+            "Ответ: целое число, десятичная дробь или последовательность цифр.",
+            "Максимальный первичный балл — 21."
+          ]
+        },
+        {
+          tag: "Время",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "180 минут",
+          list: [
+            "Экзамен длится 3 часа.",
+            "Разрешается пользоваться линейкой.",
+            "Справочные материалы выдаются вместе с КИМ."
+          ]
+        },
+        {
+          tag: "Разделы",
+          tagCls: "",
+          cls: "",
+          title: "Содержание",
+          list: [
+            "Числа и вычисления — 8 заданий.",
+            "Уравнения и неравенства — 4 задания.",
+            "Геометрия — 5 заданий.",
+            "Вероятность и статистика, функции, анализ, логика — по 1 заданию."
+          ]
+        },
+        {
+          tag: "Анти-ИИ",
+          tagCls: "",
+          cls: "",
+          title: "Проверяй правдоподобность",
+          text: "На базовом уровне часто важны прикидка, единицы измерения, округление вверх/вниз и смысл ответа. ИИ может дать красивое, но нелогичное число."
+        }
+      ],
+      prof: [
+        {
+          tag: "Часть 1",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "13 заданий с кратким ответом",
+          list: [
+            "Задания 1–13.",
+            "Ответ: целое число или конечная десятичная дробь.",
+            "Каждое верное задание — 1 первичный балл."
+          ]
+        },
+        {
+          tag: "Часть 2",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "7 заданий с развёрнутым ответом",
+          list: [
+            "Задания 14–20.",
+            "Нужна полная обоснованная запись решения.",
+            "Максимум: 14 — 2, 15 — 3, 16 — 2, 17 — 2, 18 — 3, 19 — 4, 20 — 4 балла."
+          ]
+        },
+        {
+          tag: "Итого",
+          tagCls: "green",
+          cls: "success-card",
+          title: "20 заданий = 33 балла",
+          list: [
+            "Часть 1 — 13 баллов.",
+            "Часть 2 — 20 баллов.",
+            "Время выполнения — 235 минут."
+          ]
+        },
+        {
+          tag: "Анти-ИИ",
+          tagCls: "",
+          cls: "",
+          title: "Важен ход решения",
+          text: "В профиле правильный ответ без решения оценивается 0 баллов. Проверяй ОДЗ, случаи, границы, обоснованность и логику перебора."
+        }
+      ]
+    };
+
+    const CHANGES_CARDS = {
+      base: [
+        {
+          tag: "Изменения",
+          tagCls: "green",
+          cls: "success-card",
+          title: "Структура не изменилась",
+          text: "По проекту спецификации изменения структуры и содержания КИМ ЕГЭ-2027 по математике базового уровня по сравнению с 2026 годом отсутствуют."
+        },
+        {
+          tag: "Постоянно",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "21 задание / 180 минут / 21 балл",
+          text: "Количество заданий, время и максимальный первичный балл сохранены."
+        },
+        {
+          tag: "Акцент",
+          tagCls: "",
+          cls: "",
+          title: "Практическая математика",
+          text: "Проверяются вычисления, таблицы, графики, вероятность, геометрия, логика и текстовые задачи из реальной жизни."
+        },
+        {
+          tag: "Ответы",
+          tagCls: "",
+          cls: "",
+          title: "Формат ответа",
+          text: "Целое число, конечная десятичная дробь или последовательность цифр без пробелов и запятых."
+        }
+      ],
+      prof: [
+        {
+          tag: "Новое",
+          tagCls: "red",
+          cls: "danger-card",
+          title: "Задание 6",
+          text: "Добавлено задание на случайную величину: распределение вероятностей, математическое ожидание, дисперсия, стандартное отклонение."
+        },
+        {
+          tag: "Новое",
+          tagCls: "red",
+          cls: "danger-card",
+          title: "Задание 13",
+          text: "Добавлено задание на моделирование реальных ситуаций, включая управление личными и семейными финансами: кредиты, вклады, платежи."
+        },
+        {
+          tag: "Новое",
+          tagCls: "red",
+          cls: "danger-card",
+          title: "Задание 17",
+          text: "В часть 2 добавлено прикладное задание: построить модель, исследовать её средствами алгебры и начал анализа, интерпретировать результат."
+        },
+        {
+          tag: "Итог",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "20 заданий и 33 балла",
+          text: "Количество заданий увеличилось с 19 до 20, максимальный первичный балл — с 32 до 33."
+        }
+      ]
+    };
+
+    const CRITERIA_CARDS = {
+      base: [
+        {
+          tag: "Оценивание",
+          tagCls: "green",
+          cls: "success-card",
+          title: "1 задание = 1 балл",
+          text: "Задание считается выполненным верно, если ответ записан в нужной форме и полностью совпадает с эталоном."
+        },
+        {
+          tag: "Максимум",
+          tagCls: "green",
+          cls: "success-card",
+          title: "21 первичный балл",
+          text: "Максимальный первичный балл за всю работу — 21. Затем он переводится в тестовые баллы по 100-балльной шкале."
+        },
+        {
+          tag: "Порядок цифр",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "Задание 8",
+          text: "В проекте системы оценивания базового уровня указано, что порядок записи цифр в ответе на задание 8 значения не имеет."
+        },
+        {
+          tag: "Стратегия",
+          tagCls: "",
+          cls: "",
+          title: "Не теряй простые баллы",
+          text: "На базовом уровне решающи вычисления, чтение таблиц/графиков, проценты, вероятность и геометрия без лишних усложнений."
+        }
+      ],
+      prof: [
+        {
+          tag: "Часть 1",
+          tagCls: "green",
+          cls: "success-card",
+          title: "13 баллов автоматически",
+          text: "Задания 1–13 оцениваются по 1 баллу. Ответ должен полностью совпадать с эталоном."
+        },
+        {
+          tag: "Часть 2",
+          tagCls: "orange",
+          cls: "warn-card",
+          title: "20 баллов экспертами",
+          text: "Задания 14, 16, 17 — до 2 баллов; 15, 18 — до 3 баллов; 19, 20 — до 4 баллов."
+        },
+        {
+          tag: "Максимум",
+          tagCls: "green",
+          cls: "success-card",
+          title: "33 первичных балла",
+          text: "13 баллов за часть 1 и 20 баллов за часть 2. Всего — 33 первичных балла."
+        },
+        {
+          tag: "Третий эксперт",
+          tagCls: "",
+          cls: "",
+          title: "Существенные расхождения",
+          text: "Если два эксперта расходятся на 2 и более балла в любом задании 14–20 или на 3 и более балла по сумме, назначается третья проверка."
+        },
+        {
+          tag: "Решение",
+          tagCls: "danger",
+          cls: "danger-card",
+          title: "Ответ без решения = 0",
+          text: "Правильный ответ при отсутствии текста решения оценивается 0 баллов. Важно записывать обоснованные действия."
+        },
+        {
+          tag: "Учебники",
+          tagCls: "",
+          cls: "",
+          title: "Факты без доказательств",
+          text: "Можно использовать математические факты из учебников федерального перечня без специальных доказательств и ссылок, если это уместно."
+        }
+      ]
+    };
+
+    const BASE_QUIZ = [
+      {
+        n: 1,
+        type: "auto",
+        answerType: "number",
+        answer: "14",
+        text: "Для ремонта требуется 67 рулонов обоев. Какое наименьшее количество пачек обойного клея нужно купить для такого ремонта, если 1 пачка клея рассчитана на 5 рулонов?",
+        info: "Задание 1 проверяет практические вычисления и округление вверх. 67 ÷ 5 = 13,4, значит 13 пачек не хватит, нужно 14.",
+        explanation: "Правильный ответ: 14.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 1, пример 1."
+      },
+      {
+        n: 2,
+        type: "auto",
+        answerType: "digits",
+        answer: "1234",
+        text: "Установи соответствие между величинами и их возможными значениями.\n\nВЕЛИЧИНЫ\nА) длительность звучания одной песни\nБ) продолжительность вспышки фотоаппарата\nВ) время одного оборота Земли вокруг Солнца\nГ) длительность полнометражного художественного фильма\n\nЗНАЧЕНИЯ\n1) 3,5 минуты\n2) 0,1 секунды\n3) 365 суток\n4) 105 минут\n\nВ ответе запиши последовательность цифр под буквами А, Б, В, Г без пробелов и запятых.",
+        info: "Задание 2 проверяет умение соотносить реальные величины и их значения. Песня — минуты, вспышка — доли секунды, оборот Земли — сутки, фильм — десятки минут.",
+        explanation: "А—1, Б—2, В—3, Г—4. Ответ: 1234.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 2, пример 1."
+      },
+      {
+        n: 3,
+        type: "auto",
+        answerType: "number",
+        answer: "18",
+        text: "На диаграмме показана среднемесячная температура воздуха в Екатеринбурге (Свердловске) за каждый месяц 1973 года. В офлайн-версии данные приведены таблицей:\n\nянварь −8, февраль −6, март 0, апрель 7, май 13, июнь 17, июль 18, август 16, сентябрь 10, октябрь 3, ноябрь −5, декабрь −10.\n\nОпредели наибольшую среднемесячную температуру. Ответ дай в градусах Цельсия.",
+        info: "Задание 3 проверяет умение читать диаграммы и таблицы. Нужно найти максимальное значение температуры за год.",
+        explanation: "Максимальная температура — 18 °C в июле.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 3, пример 1: диаграмма заменена таблицей для офлайн-режима."
+      },
+      {
+        n: 4,
+        type: "auto",
+        answerType: "number",
+        answer: "24",
+        text: "Мощность постоянного тока (в ваттах) вычисляется по формуле P = U² / R, где U — напряжение в вольтах, R — сопротивление в омах. Найди P, если R = 6 Ом и U = 12 В.",
+        info: "Задание 4 проверяет подстановку значений в формулу. P = 12² / 6 = 144 / 6 = 24.",
+        explanation: "Правильный ответ: 24.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 4, пример 1."
+      },
+      {
+        n: 5,
+        type: "auto",
+        answerType: "number",
+        answer: "0.97",
+        text: "Из 500 мониторов, поступивших в продажу, в среднем 15 не работают. Какова вероятность того, что случайно выбранный монитор работает?",
+        info: "Задание 5 проверяет классическую вероятность. Работают 500 − 15 = 485 мониторов. Вероятность: 485 / 500 = 0,97.",
+        explanation: "Правильный ответ: 0,97.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 5, пример 1."
+      },
+      {
+        n: 6,
+        type: "auto",
+        answerType: "number",
+        answer: "4020",
+        text: "Для группы иностранных гостей нужно купить 13 путеводителей.\n\nМагазин А: цена 290 руб./шт., доставка 250 руб., без дополнительных условий.\nМагазин Б: цена 280 руб./шт., доставка 400 руб., бесплатно при заказе свыше 3950 руб.\nМагазин В: цена 310 руб./шт., доставка 250 руб., бесплатно при заказе свыше 3500 руб.\n\nВо сколько рублей обойдётся самый дешёвый вариант покупки с доставкой?",
+        info: "Задание 6 проверяет сравнение вариантов и работу с таблицами. А: 13·290 + 250 = 4020. Б: 13·280 = 3640, доставка не бесплатна, итого 4040. В: 13·310 = 4030, доставка бесплатна, итого 4030.",
+        explanation: "Самый дешёвый вариант — 4020 рублей.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 6, пример 1."
+      },
+      {
+        n: 7,
+        type: "auto",
+        answerType: "digits",
+        answer: "3124",
+        text: "По данным измерений атмосферного давления сопоставь периоды времени и характеристики.\n\nДанные:\n4 апреля 18:00 — 758 мм рт. ст., 5 апреля 0:00 — 754;\n5 апреля 12:00 — 758, 18:00 — 760;\n6 апреля 0:00 — 758, 6:00 — 765;\n6 апреля 12:00 — 765.\n\nПЕРИОДЫ\nА) вечер 4 апреля (с 18 до 0 часов)\nБ) день 5 апреля (с 12 до 18 часов)\nВ) ночь 6 апреля (с 0 до 6 часов)\nГ) утро 6 апреля (с 6 до 12 часов)\n\nХАРАКТЕРИСТИКИ\n1) давление росло, но не превышало 760 мм рт. ст.\n2) наибольший рост давления\n3) давление падало\n4) давление не изменялось\n\nЗапиши последовательность цифр под А, Б, В, Г.",
+        info: "Задание 7 проверяет чтение графиков и таблиц. А: 758 → 754, падало (3). Б: 758 → 760, росло, но не превышало 760 (1). В: 758 → 765, наибольший рост (2). Г: 765 → 765, не изменялось (4).",
+        explanation: "Ответ: 3124.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 7, пример 1: график заменён таблицей значений."
+      },
+      {
+        n: 8,
+        type: "auto",
+        answerType: "digits",
+        orderIndependent: true,
+        acceptable: ["12", "21"],
+        text: "Маша младше Ани на год, но старше Ксюши на два года. Выбери все верные утверждения.\n\n1) Любая девочка, помимо указанных, которая старше Маши, также старше Ксюши.\n2) Среди указанных девочек нет никого младше Ксюши.\n3) Любая девочка, помимо указанных, которая старше Ксюши, также старше Маши.\n4) Аня и Ксюша одного возраста.\n\nВ ответе запиши номера верных утверждений без пробелов и запятых. Порядок цифр значения не имеет.",
+        info: "Задание 8 проверяет логику. Из условий: Ксюша < Маша < Аня. Верны утверждения 1 и 2.",
+        explanation: "Правильный ответ: 12 или 21.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 8, пример 1."
+      },
+      {
+        n: 9,
+        type: "auto",
+        answerType: "number",
+        answer: "3",
+        text: "План местности разбит на клетки 1 км × 1 км. Озеро Великое полностью закрывает 2 клетки, ещё 1 клетка закрыта более чем наполовину, а 3 клетки — менее чем наполовину. Оцени площадь озера, считая полную клетку и клетку более чем наполовину за 1 км², а менее чем наполовину — за 0. Ответ округли до целого числа.",
+        info: "Задание 9 проверяет оценку площади по клеткам. 2 полные клетки + 1 клетка более чем наполовину = 3 км².",
+        explanation: "Правильный ответ: 3.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 9, пример 1: рисунок заменён описанием подсчёта клеток."
+      },
+      {
+        n: 10,
+        type: "auto",
+        answerType: "number",
+        answer: "860",
+        text: "Дачный участок имеет форму квадрата со стороной 30 м. Дом имеет форму прямоугольника со сторонами 8 м и 5 м. Найди площадь части участка, не занятой домом. Ответ дай в квадратных метрах.",
+        info: "Задание 10 проверяет планиметрию и практические вычисления. Площадь участка: 30·30 = 900. Площадь дома: 8·5 = 40. Свободная часть: 900 − 40 = 860.",
+        explanation: "Правильный ответ: 860.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 10, пример 1."
+      },
+      {
+        n: 11,
+        type: "auto",
+        answerType: "number",
+        answer: "6000",
+        text: "В бак, имеющий форму правильной четырёхугольной призмы, налито 10 л воды. После полного погружения в воду детали уровень воды увеличился в 1,6 раза. Найди объём детали в кубических сантиметрах. Считай, что 1 л = 1000 см³.",
+        info: "Задание 11 проверяет стереометрию и объёмы. Общий объём до нового уровня: 10 · 1,6 = 16 л. Объём детали: 16 − 10 = 6 л = 6000 см³.",
+        explanation: "Правильный ответ: 6000.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 11, пример 1."
+      },
+      {
+        n: 12,
+        type: "auto",
+        answerType: "number",
+        answer: "39",
+        text: "В треугольнике ABC известно, что AB = BC = 65, AC = 104. Найди длину медианы BM.",
+        info: "Задание 12 проверяет планиметрию. В равнобедренном треугольнике медиана к основанию является высотой. AM = 52. BM = √(65² − 52²) = √(4225 − 2704) = √1521 = 39.",
+        explanation: "Правильный ответ: 39.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 12, пример 1."
+      },
+      {
+        n: 13,
+        type: "auto",
+        answerType: "number",
+        answer: "270",
+        text: "Через точку, делящую высоту конуса в отношении 1:2, считая от вершины, проведена плоскость, параллельная основанию. Объём отсекаемого малого конуса равен 10. Найди объём исходного конуса.",
+        info: "Задание 13 проверяет подобие тел. Высота малого конуса составляет 1/3 высоты большого, поэтому объёмы относятся как 1³:3³ = 1:27. Исходный конус: 10 · 27 = 270.",
+        explanation: "Правильный ответ: 270.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 13, пример 1."
+      },
+      {
+        n: 14,
+        type: "auto",
+        answerType: "number",
+        answer: "16.9",
+        text: "Найди значение выражения: 2,2 · 5,5 + 4,8.",
+        info: "Задание 14 проверяет вычисления с десятичными дробями. 2,2 · 5,5 = 12,1; 12,1 + 4,8 = 16,9.",
+        explanation: "Правильный ответ: 16,9.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 14, пример 1."
+      },
+      {
+        n: 15,
+        type: "auto",
+        answerType: "number",
+        answer: "252",
+        text: "Ежемесячная плата за телефон составляет 240 рублей. В следующем году она увеличится на 5%. Сколько рублей будет составлять плата в следующем году?",
+        info: "Задание 15 проверяет проценты. 5% от 240 = 12. Новая плата: 240 + 12 = 252.",
+        explanation: "Правильный ответ: 252.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 15, пример 1."
+      },
+      {
+        n: 16,
+        type: "auto",
+        answerType: "number",
+        answer: "10",
+        text: "Найди значение выражения: √20 · √5.",
+        info: "Задание 16 проверяет свойства корней. √20 · √5 = (20·5) = √100 = 10.",
+        explanation: "Правильный ответ: 10.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 16, пример 1."
+      },
+      {
+        n: 17,
+        type: "auto",
+        answerType: "number",
+        answer: "6",
+        text: "Найди корень уравнения: 2^(9 − x) = 8.",
+        info: "Задание 17 проверяет показательные уравнения. 8 = 2³, значит 9 − x = 3, откуда x = 6.",
+        explanation: "Правильный ответ: 6.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 17, пример 1."
+      },
+      {
+        n: 18,
+        type: "auto",
+        answerType: "digits",
+        answer: "4321",
+        text: "На координатной прямой отмечены точки A, B, C и D с приблизительными координатами: A ≈ 0,5; B ≈ 2,3; C ≈ 3,3; D ≈ 2,45.\n\nКаждой точке соответствует одно из чисел:\n1) √6\n2) log₂ 10\n3) 7/3\n4) (√3 − 1)²\n\nЗапиши последовательность цифр под точками A, B, C, D.",
+        info: "Задание 18 проверяет оценку чисел. (√3 − 1)² ≈ 0,54; 7/3 ≈ 2,33; √6 ≈ 2,45; log₂ 10 ≈ 3,32. Значит A—4, B—3, C—2, D—1.",
+        explanation: "Правильный ответ: 4321.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 18, пример 1: координатная прямая заменена текстовыми приближениями точек."
+      },
+      {
+        n: 19,
+        type: "auto",
+        answerType: "number",
+        acceptable: ["6840", "6480", "4860", "4680", "8640", "8460"],
+        text: "Найди четырёхзначное натуральное число, кратное 45, все цифры которого различны и чётны. В ответе запиши какое-нибудь одно такое число.",
+        info: "Задание 19 проверяет делимость и перебор. Кратность 45 означает делимость на 5 и 9. Среди чётных цифр подходит набор 4, 6, 8, 0; число должно оканчиваться на 0, а сумма цифр 4+6+8+0=18 кратна 9.",
+        explanation: "Подходят, например: 4680, 4860, 6480, 6840, 8460, 8640.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 19, пример 1."
+      },
+      {
+        n: 20,
+        type: "auto",
+        answerType: "number",
+        answer: "4",
+        text: "Два человека одновременно вышли из дома на прогулку до опушки леса, находящейся в 4,5 км от дома. Один идёт со скоростью 4 км/ч, другой — со скоростью 5 км/ч. Дойдя до опушки, второй сразу возвращается обратно. На каком расстоянии от дома произойдёт их встреча? Ответ дай в километрах.",
+        info: "Задание 20 проверяет текстовые задачи на движение. Быстрый дойдёт до опушки за 0,9 ч. Первый за это время пройдёт 3,6 км. Между ними останется 0,9 км, скорость сближения 9 км/ч, время до встречи 0,1 ч. Первый пройдёт ещё 0,4 км: 3,6 + 0,4 = 4 км.",
+        explanation: "Правильный ответ: 4.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 20, пример 1."
+      },
+      {
+        n: 21,
+        type: "auto",
+        answerType: "number",
+        answer: "19",
+        text: "Список заданий викторины состоял из 25 вопросов. За правильный ответ давали 5 очков, за неправильный снимали 12 очков, при отсутствии ответа давали 0 очков. Сколько верных ответов дал ученик, набравший 35 очков, если известно, что он хотя бы один раз ошибся?",
+        info: "Задание 21 проверяет перебор и логику. Пусть x — верные, y — неверные. 5x − 12y = 35, x + y ≤ 25, y ≥ 1. При y = 5 получаем x = 19; всего 24 ответа, один пропущен.",
+        explanation: "Правильный ответ: 19.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика базовый, задание 21, пример 1."
+      }
+    ];
+
+    const PROF_QUIZ = [
+      {
+        n: 1,
+        type: "auto",
+        answerType: "number",
+        answer: "3",
+        text: "В четырёхугольник ABCD, периметр которого равен 22, вписана окружность, AB = 8. Найди длину стороны CD.",
+        info: "Задание 1 проверяет планиметрию. Для описанного четырёхугольника суммы противоположных сторон равны: AB + CD = AD + BC. Периметр 22 означает AB + CD = 11. Тогда CD = 11 − 8 = 3.",
+        explanation: "Правильный ответ: 3.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 1, пример 1."
+      },
+      {
+        n: 2,
+        type: "auto",
+        answerType: "number",
+        answer: "2",
+        text: "Даны векторы a = (5; 3) и b = (4; −6). Найди скалярное произведение a · b.",
+        info: "Задание 2 проверяет векторы и координаты. a · b = 5·4 + 3·(−6) = 20 − 18 = 2.",
+        explanation: "Правильный ответ: 2.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 2, пример 3."
+      },
+      {
+        n: 3,
+        type: "auto",
+        answerType: "number",
+        answer: "36",
+        text: "Через среднюю линию основания треугольной призмы проведена плоскость, параллельная боковому ребру. Площадь боковой поверхности отсечённой треугольной призмы равна 18. Найди площадь боковой поверхности исходной призмы.",
+        info: "Задание 3 проверяет стереометрию. Отсечённая призма имеет половину периметра основания при той же высоте, поэтому её боковая поверхность вдвое меньше исходной: 18 · 2 = 36.",
+        explanation: "Правильный ответ: 36.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 3, пример 1."
+      },
+      {
+        n: 4,
+        type: "auto",
+        answerType: "number",
+        answer: "0.3",
+        text: "В сборнике билетов по химии всего 80 билетов, в 56 из них встречается вопрос по теме «Углеводороды». Найди вероятность того, что в случайно выбранном билете не достанется вопрос по этой теме.",
+        info: "Задание 4 проверяет классическую вероятность. Билетов без темы: 80 − 56 = 24. Вероятность: 24 / 80 = 0,3.",
+        explanation: "Правильный ответ: 0,3.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 4, пример 1."
+      },
+      {
+        n: 5,
+        type: "auto",
+        answerType: "number",
+        answer: "0.0081",
+        text: "Стрелок стреляет по одному разу в каждую из четырёх мишеней. Вероятность попадания при каждом выстреле равна 0,9. Найди вероятность того, что стрелок попадёт в две первые мишени и не попадёт в две последние.",
+        info: "Задание 5 проверяет независимые события. Нужно перемножить: 0,9 · 0,9 · 0,1 · 0,1 = 0,0081.",
+        explanation: "Правильный ответ: 0,0081.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 5, пример 1."
+      },
+      {
+        n: 6,
+        type: "auto",
+        answerType: "number",
+        answer: "55",
+        text: "Организаторы лотереи выпустили 10 000 билетов. Выигрыши распределены так:\n100 руб. — 500 билетов;\n1000 руб. — 100 билетов;\n5000 руб. — 50 билетов;\n10 000 руб. — 10 билетов;\n50 000 руб. — 1 билет.\n\nНайди математическое ожидание величины «выигрыш на один билет». Ответ дай в рублях.",
+        info: "Задание 6 — новое в ЕГЭ-2027. Матожидание: (100·500 + 1000·100 + 5000·50 + 10000·10 + 50000·1) / 10000 = 550000 / 10000 = 55.",
+        explanation: "Правильный ответ: 55.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 6, пример 1."
+      },
+      {
+        n: 7,
+        type: "auto",
+        answerType: "number",
+        answer: "7",
+        text: "Найди корень уравнения: 4^(x − 4) = 64.",
+        info: "Задание 7 проверяет показательные уравнения. 64 = 4³, значит x − 4 = 3, откуда x = 7.",
+        explanation: "Правильный ответ: 7.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 7, пример 1."
+      },
+      {
+        n: 8,
+        type: "auto",
+        answerType: "number",
+        answer: "6",
+        text: "Найди значение выражения: 3 sin 164° / (sin 82° · sin 8°).",
+        info: "Задание 8 проверяет преобразования тригонометрических выражений. sin 164° = sin 16° = 2 sin 8° cos 8°, sin 82° = cos 8°. Получаем 3 · 2 sin 8° cos 8° / (cos 8° sin 8°) = 6.",
+        explanation: "Правильный ответ: 6.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 8, пример 1."
+      },
+      {
+        n: 9,
+        type: "auto",
+        answerType: "number",
+        answer: "1",
+        text: "Функция f(x) определена на интервале (−10; 7). По графику производной y = f'(x) установлено, что на отрезке [−2; 6] производная отрицательна на (−2; 1), положительна на (1; 3) и отрицательна на (3; 6). Найди количество точек минимума функции f(x), принадлежащих отрезку [−2; 6].",
+        info: "Задание 9 проверяет связь знака производной и экстремумов. Точка минимума — где производная меняет знак с минус на плюс. На заданном отрезке такая точка одна: x = 1.",
+        explanation: "Правильный ответ: 1.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 9, пример 1: график производной заменен описанием знаков."
+      },
+      {
+        n: 10,
+        type: "auto",
+        answerType: "number",
+        answer: "3",
+        text: "Автомобиль движется со скоростью v₀ = 15 м/с и начинает торможение с ускорением a = 2 м/с². Путь за t секунд: S = v₀t − at²/2. Известно, что автомобиль проехал 36 м. Найди время t в секундах.",
+        info: "Задание 10 проверяет прикладные формулы. 36 = 15t − t², значит t² − 15t + 36 = 0. Корни: t = 3 и t = 12. Полное торможение длится 15/2 = 7,5 с, поэтому подходит t = 3.",
+        explanation: "Правильный ответ: 3.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 10, пример 1."
+      },
+      {
+        n: 11,
+        type: "auto",
+        answerType: "number",
+        answer: "15",
+        text: "Два велосипедиста одновременно отправились в 90-километровый пробег. Первый ехал со скоростью на 5 км/ч большей, чем второй, и прибыл на 3 часа раньше. Найди скорость велосипедиста, пришедшего первым.",
+        info: "Задание 11 проверяет текстовые задачи на движение. Пусть скорость второго — v. Тогда 90/v − 90/(v+5) = 3. Отсюда v² + 5v − 150 = 0, v = 10. Первый ехал со скоростью 15 км/ч.",
+        explanation: "Правильный ответ: 15.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 11, пример 1."
+      },
+      {
+        n: 12,
+        type: "auto",
+        answerType: "number",
+        answer: "0.5",
+        text: "График функции y = k/x проходит через точку (5; 1). Найди значение y при x = 10.",
+        info: "Задание 12 проверяет функции и графики. Из точки (5; 1): 1 = k/5, значит k = 5. При x = 10: y = 5/10 = 0,5.",
+        explanation: "Правильный ответ: 0,5.",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 12, пример 1: график заменён точкой, через которую он проходит."
+      },
+      {
+        n: 13,
+        type: "auto",
+        answerType: "number",
+        answer: "259200",
+        text: "В июле 2030 года планируется взять кредит 182 000 рублей на три года. Каждый январь долг увеличивается на 20% по сравнению с концом предыдущего года; с февраля по июнь каждого года нужно выплатить одним платежом часть долга. Кредит погашается тремя равными платежами. Сколько рублей составит общая сумма платежей?",
+        info: "Задание 13 — новое в ЕГЭ-2027, финансовая математика. Платёж: 182000 · 0,2 · 1,2³ / (1,2³ − 1) = 86400. Общая сумма: 86400 · 3 = 259200.",
+        explanation: "Правильный ответ: 259200.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 13, пример 1."
+      },
+      {
+        n: 14,
+        type: "essay",
+        maxBall: 2,
+        text: "а) Реши уравнение: cos 2x + 2 cos(x + π) + 1 = 0.\nб) Укажи корни этого уравнения, принадлежащие отрезку [−4π; −5π/2].",
+        info: "Задание 14 оценивается максимум в 2 балла. Нужно обоснованно получить верные ответы в обоих пунктах. За верный пункт а или верную последовательность шагов с вычислительной ошибкой возможен 1 балл.",
+        explanation: "Ориентир: а) x = π/2 + πk; x = π/4 + 2πn; x = −π/4 + 2πm. б) −15π/4; −7π/2; −5π/2.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 14, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: верен пункт а или есть верная последовательность шагов, но ответ неполный / есть вычислительная ошибка", balls: 1 },
+          { label: "2 балла: обоснованно получены верные ответы в обоих пунктах", balls: 2 }
+        ]
+      },
+      {
+        n: 15,
+        type: "essay",
+        maxBall: 3,
+        text: "В правильной шестиугольной пирамиде SABCDEF точки M и K — середины боковых рёбер SA и SD соответственно.\nа) Докажи, что прямые BC и MK параллельны.\nб) Найди объём пирамиды MABF, если AB = 12, а угол между плоскостью BMC и плоскостью основания пирамиды равен 30°.",
+        info: "Задание 15 оценивается максимум в 3 балла. Нужны верное доказательство пункта а и обоснованный ответ пункта б. Возможен частичный балл за одно из двух.",
+        explanation: "Ориентир: б) 72√3.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 15, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: есть верное доказательство пункта а или верный ответ в пункте б с использованием пункта а, но не всё выполнено", balls: 1 },
+          { label: "2 балла: обоснованный ответ в пункте б или верное доказательство с арифметической ошибкой в пункте б", balls: 2 },
+          { label: "3 балла: верное доказательство и обоснованный верный ответ в пункте б", balls: 3 }
+        ]
+      },
+      {
+        n: 16,
+        type: "essay",
+        maxBall: 2,
+        text: "Реши неравенство: log₂(log₂ x) ≤ 1.",
+        info: "Задание 16 оценивается максимум в 2 балла. Важны ОДЗ, равносильные переходы и корректная запись промежутка. Офлайн-адаптация ведёт к официальному ответу примера 1: (1; 4].",
+        explanation: "ОДЗ: log₂ x > 0, значит x > 1. Далее log₂(log₂ x) ≤ 1 ⇒ log₂ x ≤ 2 ⇒ x ≤ 4. Ответ: (1; 4].",
+        source: "Адаптировано из проекта демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 16, пример 1: сохранён официальный ответ (1; 4].",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: верная последовательность шагов, но ошибка в ОДЗ, промежутке или потеря точки", balls: 1 },
+          { label: "2 балла: обоснованно получен верный ответ (1; 4]", balls: 2 }
+        ]
+      },
+      {
+        n: 17,
+        type: "essay",
+        maxBall: 2,
+        text: "На заводе имеется генератор с ЭДС ε = 50 В и внутренним сопротивлением r = 1 Ом. Сила тока: I = ε / (r + R). Тепловая мощность в нагрузке: P = I²R. Какова максимальная тепловая мощность P, которая может быть выделена нагрузкой?",
+        info: "Задание 17 — новое в ЕГЭ-2027. Максимум 2 балла. Нужно построить функцию P(R), исследовать её и корректно интерпретировать результат.",
+        explanation: "P(R) = 2500R / (R + 1)². Производная положительна при 0 ≤ R < 1 и отрицательна при R > 1, максимум при R = 1. Ответ: 625 Вт.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 17, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: верная последовательность шагов, но вычислительная ошибка", balls: 1 },
+          { label: "2 балла: обоснованно получен верный ответ 625 Вт", balls: 2 }
+        ]
+      },
+      {
+        n: 18,
+        type: "essay",
+        maxBall: 3,
+        text: "Окружность с центром O касается боковых сторон AB и BC равнобедренного остроугольного треугольника ABC и его высоты CH.\nа) Докажи, что угол OAC равен 45°.\nб) Найди длину отрезка BC, если BO = 1 и AC = 6.",
+        info: "Задание 18 оценивается максимум в 3 балла. Это планиметрия: доказательство + вычисление. Важны чертёж, вписанный четырёхугольник, медиана/высота и теорема Пифагора.",
+        explanation: "Ориентир: б) BC = 5.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 18, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: есть доказательство пункта а или верный ответ в пункте б с использованием пункта а, но не всё выполнено", balls: 1 },
+          { label: "2 балла: обоснованный ответ в пункте б или верное доказательство с арифметической ошибкой", balls: 2 },
+          { label: "3 балла: верное доказательство и обоснованный верный ответ", balls: 3 }
+        ]
+      },
+      {
+        n: 19,
+        type: "essay",
+        maxBall: 4,
+        text: "Найди все значения a, при каждом из которых система уравнений\n4x − y + a = 0,\n2|y| − x² + 4x = 0\nимеет ровно два различных решения.",
+        info: "Задание 19 оценивается максимум в 4 балла. Нужны все случаи, границы и обоснование. Частичный верный промежуток может дать 1–2 балла.",
+        explanation: "Ориентир: a < −18; −16 < a < 0; a > 2.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 19, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: задача верно сведена к исследованию взаимного расположения графиков", balls: 1 },
+          { label: "2 балла: получен один верный промежуток или есть вычислительная ошибка при верных шагах", balls: 2 },
+          { label: "3 балла: ответ отличается только включением/исключением граничных точек", balls: 3 },
+          { label: "4 балла: обоснованно получен верный ответ", balls: 4 }
+        ]
+      },
+      {
+        n: 20,
+        type: "essay",
+        maxBall: 4,
+        text: "На столе лежит некоторое количество карточек: часть синих, остальные красных, есть хотя бы по одной карточке каждого цвета. На каждой карточке написано целое число. На синих — различные числа, делящиеся на 5; на красных — различные чётные числа. Все числа больше −120. Наибольшее число на красной карточке равно удвоенному количеству синих карточек, а наибольшее число на синей карточке равно количеству красных карточек.\nа) Может ли на столе лежать ровно шесть карточек?\nб) Может ли число красных карточек быть на 90 больше числа синих?\nв) Какое наибольшее количество карточек может лежать на столе?",
+        info: "Задание 20 оценивается максимум в 4 балла. Нужны примеры, оценка и обоснование. Просто ответ «да/нет» без доказательства не работает.",
+        explanation: "Ориентир: а) да; б) нет; в) 150.",
+        source: "Проект демоверсии ФИПИ ЕГЭ-2027, математика профиль, задание 20, пример 1.",
+        options: [
+          { label: "0 баллов: решение не соответствует критериям", balls: 0 },
+          { label: "1 балл: обоснованно получен верный ответ в пункте а или б", balls: 1 },
+          { label: "2 балла: обоснованно получены ответы в пунктах а и б ИЛИ обоснованно получен верный ответ в пункте в", balls: 2 },
+          { label: "3 балла: обоснованно получен верный ответ в пункте в и в пункте а или б", balls: 3 },
+          { label: "4 балла: обоснованно получены верные ответы во всех пунктах", balls: 4 }
+        ]
+      }
+    ];
+
+    const QUIZZES = {
+      base: BASE_QUIZ,
+      prof: PROF_QUIZ
+    };
+
+    const CHECKLIST = {
+      base: [
+        { key: "b1", text: "Знаю структуру: 21 задание, 180 минут, 21 первичный балл." },
+        { key: "b2", text: "Умею округлять вверх и вниз в практических задачах." },
+        { key: "b3", text: "Читаю таблицы, диаграммы и графики без спешки." },
+        { key: "b4", text: "Подставляю значения в формулы и проверяю единицы измерения." },
+        { key: "b5", text: "Решаю простейшие задачи на классическую вероятность." },
+        { key: "b6", text: "Сопоставляю величины с реалистичными значениями." },
+        { key: "b7", text: "Решаю логические задачи на порядок и сравнение." },
+        { key: "b8", text: "Нахожу площади фигур по клеткам и формулам." },
+        { key: "b9", text: "Считаю объёмы простейших стереометрических тел." },
+        { key: "b10", text: "Выполняю вычисления с дробями, процентами, корнями и степенями." },
+        { key: "b11", text: "Решаю простые показательные и логарифмические уравнения." },
+        { key: "b12", text: "Оцениваю числа на координатной прямой." },
+        { key: "b13", text: "Решаю задачи на делимость и перебор." },
+        { key: "b14", text: "Решаю текстовые задачи на движение, работу и смеси." },
+        { key: "b15", text: "Прошёл пробник на время и разобрал все ошибки." }
+      ],
+      prof: [
+        { key: "p1", text: "Знаю структуру: 20 заданий, 235 минут, 33 первичных балла." },
+        { key: "p2", text: "Часть 1: 13 заданий с кратким ответом, по 1 баллу." },
+        { key: "p3", text: "Задание 6: умею считать математическое ожидание и работать со случайной величиной." },
+        { key: "p4", text: "Задание 13: понимаю кредиты, вклады, равные платежи и сумму платежей." },
+        { key: "p5", text: "Повторил планиметрию: четырёхугольники, окружности, площади, подобие." },
+        { key: "p6", text: "Отработал векторы: координаты, скалярное произведение, длина вектора." },
+        { key: "p7", text: "Повторил стереометрию: призмы, пирамиды, объёмы, сечения." },
+        { key: "p8", text: "Отработал вероятность: классическая схема, независимые события." },
+        { key: "p9", text: "Повторил уравнения: показательные, логарифмические, тригонометрические." },
+        { key: "p10", text: "Отработал производную: знак, экстремумы, касательная, график производной." },
+        { key: "p11", text: "Решаю текстовые задачи: движение, работа, смеси, финансы." },
+        { key: "p12", text: "Задание 14: умею решать уравнение и отбирать корни на отрезке." },
+        { key: "p13", text: "Задание 15: умею доказывать параллельность и считать объём в пространстве." },
+        { key: "p14", text: "Задание 16: помню ОДЗ и равносильные переходы в неравенствах." },
+        { key: "p15", text: "Задание 17: умею строить прикладную модель и исследовать её производной." },
+        { key: "p16", text: "Задание 18: планиметрия с доказательством и вычислением." },
+        { key: "p17", text: "Задание 19: параметры, случаи, границы, графическая интерпретация." },
+        { key: "p18", text: "Задание 20: логика, перебор, оценка, примеры и контрпримеры." },
+        { key: "p19", text: "Написал минимум 3 полных решения части 2 по критериям." },
+        { key: "p20", text: "Прошёл полный пробник на время и разложил ошибки по заданиям." }
+      ]
+    };
+
+    const PLAN = {
+      base: [
+        { day: 1, critical: true, text: "Диагностика: пройти пробник базового уровня на время (180 минут)." },
+        { day: 2, critical: false, text: "Числа и вычисления: дроби, проценты, степени, корни." },
+        { day: 3, critical: false, text: "Практические задачи: округление вверх/вниз, сдача, шлюпки, комнаты." },
+        { day: 4, critical: false, text: "Величины и значения: обучение прикидке реальных размеров." },
+        { day: 5, critical: false, text: "Таблицы, диаграммы, графики: чтение данных." },
+        { day: 6, critical: false, text: "Формулы: подстановка значений и проверка единиц." },
+        { day: 7, critical: false, text: "Вероятность: классическая формула, дополнение события." },
+        { day: 8, critical: false, text: "Оптимальный выбор: магазины, тарифы, доставка, топливо." },
+        { day: 9, critical: false, text: "Логика: порядок, сравнение, верные утверждения." },
+        { day: 10, critical: false, text: "Геометрия на клетках: оценка площади." },
+        { day: 11, critical: false, text: "Планиметрия: квадраты, прямоугольники, треугольники." },
+        { day: 12, critical: false, text: "Стереометрия: призмы, цилиндры, конусы, объёмы." },
+        { day: 13, critical: false, text: "Медианы, высоты, теорема Пифагора." },
+        { day: 14, critical: false, text: "Вычисления: порядок действий, десятичные дроби." },
+        { day: 15, critical: false, text: "Проценты: увеличение, уменьшение, налог, скидка." },
+        { day: 16, critical: false, text: "Степени и корни: свойства и преобразования." },
+        { day: 17, critical: false, text: "Уравнения: простые показательные и логарифмические." },
+        { day: 18, critical: false, text: "Координатная прямая: сравнение чисел." },
+        { day: 19, critical: false, text: "Делимость и перебор: кратные числа, цифры." },
+        { day: 20, critical: false, text: "Текстовые задачи на движение." },
+        { day: 21, critical: false, text: "Текстовые задачи на смеси, проценты, работу." },
+        { day: 22, critical: false, text: "Сложные задания 19–21: стратегия и проверка." },
+        { day: 23, critical: false, text: "Пробник № 2 на время." },
+        { day: 24, critical: false, text: "Разбор ошибок и слабые темы." },
+        { day: 25, critical: true, text: "Финальное повторение формата, тайминга и типичных ловушек." }
+      ],
+      prof: [
+        { day: 1, critical: true, text: "Диагностика: пробник профиля на время (235 минут)." },
+        { day: 2, critical: false, text: "Планиметрия: описанные и вписанные четырёхугольники." },
+        { day: 3, critical: false, text: "Векторы: координаты, скалярное произведение, длина." },
+        { day: 4, critical: false, text: "Стереометрия части 1: призмы, параллелепипеды, объёмы." },
+        { day: 5, critical: false, text: "Вероятность: классическая схема и независимые события." },
+        { day: 6, critical: true, text: "Задание 6: случайная величина и математическое ожидание." },
+        { day: 7, critical: false, text: "Уравнения части 1: показательные и логарифмические." },
+        { day: 8, critical: false, text: "Вычисления: тригонометрические преобразования." },
+        { day: 9, critical: false, text: "Производная: экстремумы по графику производной." },
+        { day: 10, critical: false, text: "Прикладные формулы: движение, торможение, физика." },
+        { day: 11, critical: false, text: "Текстовые задачи: движение, работа, смеси." },
+        { day: 12, critical: false, text: "Функции и графики: обратная пропорциональность, показательная функция." },
+        { day: 13, critical: true, text: "Задание 13: кредиты, вклады, равные платежи." },
+        { day: 14, critical: true, text: "Задание 14: тригонометрическое уравнение и отбор корней." },
+        { day: 15, critical: true, text: "Задание 15: стереометрия, доказательство и объём." },
+        { day: 16, critical: false, text: "Задание 16: неравенства, ОДЗ, равносильные переходы." },
+        { day: 17, critical: true, text: "Задание 17: прикладная оптимизационная задача." },
+        { day: 18, critical: true, text: "Задание 18: планиметрия, окружность, высота, доказательство." },
+        { day: 19, critical: true, text: "Задание 19: параметры, графическое исследование, случаи." },
+        { day: 20, critical: true, text: "Задание 20: логика, оценка, пример, контрпример." },
+        { day: 21, critical: false, text: "Полный пробник части 1 на время." },
+        { day: 22, critical: false, text: "Разбор ошибок части 1." },
+        { day: 23, critical: false, text: "Тренировка записи решений части 2." },
+        { day: 24, critical: false, text: "Пробник: часть 1 + 2–3 задания части 2." },
+        { day: 25, critical: true, text: "Финальное повторение критериев, тайминга и ловушек." }
+      ]
+    };
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
+      });
+    }
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function normalizeNumber(value) {
+      return String(value)
+        .trim()
+        .replace(/\s+/g, "")
+        .replace(/,/g, ".")
+        .replace(/−/g, "-");
+    }
+
+    function normalizeDigits(value) {
+      return String(value).replace(/\D/g, "");
+    }
+
+    function sortDigits(value) {
+      return normalizeDigits(value).split("").sort().join("");
+    }
+
+    function getAcceptable(task) {
+      return task.acceptable && task.acceptable.length ? task.acceptable : [task.answer];
+    }
+
+    function isCorrectAuto(task, raw) {
+      if (task.answerType === "digits") {
+        const input = normalizeDigits(raw);
+        if (!input) return false;
+        const acceptable = getAcceptable(task);
+        if (task.orderIndependent) {
+          const sortedInput = sortDigits(input);
+          return acceptable.some(function (ans) { return sortDigits(ans) === sortedInput; });
+        }
+        return acceptable.some(function (ans) { return normalizeDigits(ans) === input; });
+      }
+
+      const inputNum = Number(normalizeNumber(raw));
+      if (!Number.isFinite(inputNum)) return false;
+
+      const acceptable = getAcceptable(task);
+      return acceptable.some(function (ans) {
+        const expected = Number(normalizeNumber(ans));
+        return Number.isFinite(expected) && Math.abs(inputNum - expected) < 1e-9;
+      });
+    }
+
+    function correctAnswerText(task) {
+      return getAcceptable(task).join(" или ");
+    }
+
+    function renderHero() {
+      const L = LEVELS[currentLevel];
+      document.getElementById("heroBadge").textContent = L.badge;
+      document.getElementById("heroTitle").innerHTML = L.title;
+      document.getElementById("heroLead").textContent = L.lead;
+      document.getElementById("structureSub").textContent = L.structureSub;
+      document.getElementById("changesSub").textContent = L.changesSub;
+      document.getElementById("criteriaSub").textContent = L.criteriaSub;
+      document.getElementById("trainerTitle").textContent = L.trainerTitle;
+      document.getElementById("trainerNote").textContent = L.trainerNote;
+      document.getElementById("planSub").textContent = L.planSub;
+      document.getElementById("answeredLabel").textContent = "блоков пройдено";
+      document.getElementById("correctLabel").textContent = currentLevel === "base"
+        ? "верных ответов"
+        : "верных ответов (часть 1)";
+    }
+
+    function renderCardGrid(gridId, cards) {
+      const grid = document.getElementById(gridId);
+      grid.innerHTML = cards.map(function (c) {
+        let inner = '<span class="tag ' + (c.tagCls || "") + '">' + escapeHtml(c.tag) + "</span>";
+        inner += "<h3>" + escapeHtml(c.title) + "</h3>";
+        if (c.list) {
+          inner += '<ul class="mini-list">' + c.list.map(function (i) {
+            return "<li>" + escapeHtml(i) + "</li>";
+          }).join("") + "</ul>";
+        } else if (c.text) {
+          inner += "<p>" + escapeHtml(c.text) + "</p>";
+        }
+        return '<div class="card ' + (c.cls || "") + '">' + inner + "</div>";
+      }).join("");
+    }
+
+    function renderStaticSections() {
+      renderCardGrid("structureGrid", STRUCTURE_CARDS[currentLevel]);
+      renderCardGrid("changesGrid", CHANGES_CARDS[currentLevel]);
+      renderCardGrid("criteriaGrid", CRITERIA_CARDS[currentLevel]);
+    }
+
+    function renderChecklist() {
+      const ul = document.getElementById("checklistUl");
+      ul.innerHTML = CHECKLIST[currentLevel].map(function (item) {
+        const checked = checklistState[item.key] ? "checked" : "";
+        const doneClass = checklistState[item.key] ? "done" : "";
+        return [
+          '<li class="check-item ' + doneClass + '">',
+            '<input type="checkbox" id="' + item.key + '" data-key="' + item.key + '" ' + checked + " />",
+            '<label for="' + item.key + '">' + escapeHtml(item.text) + "</label>",
+          "</li>"
+        ].join("");
+      }).join("");
+    }
+
+    function renderPlan() {
+      document.getElementById("planGrid").innerHTML = PLAN[currentLevel].map(function (d) {
+        return [
+          '<div class="day ' + (d.critical ? "critical" : "") + '">',
+            "<b>День " + d.day + "</b>",
+            escapeHtml(d.text),
+          "</div>"
+        ].join("");
+      }).join("");
+    }
+
+    function renderQuiz() {
+      const quiz = QUIZZES[currentLevel];
+      const container = document.getElementById("quizContainer");
+
+      container.innerHTML = quiz.map(function (task) {
+        const isAuto = task.type === "auto";
+        const partLabel = currentLevel === "base"
+          ? "Базовый уровень"
+          : (task.n <= 13 ? "Часть 1" : "Часть 2");
+        const tagClass = isAuto ? "orange" : "green";
+
+        let trainerHtml = "";
+
+        if (isAuto) {
+          trainerHtml = [
+            '<div class="q-part">',
+              '<span class="q-trainer-label">Тренажёр — введи ответ</span>',
+              '<div class="answer-row">',
+                '<input id="input-' + task.n + '" class="answer-input" type="text" inputmode="text" placeholder="Твой ответ" />',
+                '<button class="btn small" onclick="checkAuto(' + task.n + ')">Проверить</button>',
+              "</div>",
+            "</div>"
+          ].join("");
+        } else {
+          const optionsHtml = task.options.map(function (opt, idx) {
+            return '<button class="option" onclick="chooseEssay(' + task.n + ', ' + idx + ')">' + escapeHtml(opt.label) + "</button>";
+          }).join("");
+
+          trainerHtml = [
+            '<div class="q-part">',
+              '<span class="q-trainer-label">Самопроверка по критериям</span>',
+              '<div class="options" id="options-' + task.n + '">',
+                optionsHtml,
+              "</div>",
+            "</div>"
+          ].join("");
+        }
+
+        return [
+          '<div class="question-block" id="q' + task.n + '">',
+            '<div class="q-number">Задание ' + task.n + " / " + LEVELS[currentLevel].total + "</div>",
+            '<div style="margin:-8px 0 14px;"><span class="tag ' + tagClass + '">' + escapeHtml(partLabel) + "</span></div>",
+            '<div class="q-part">',
+              '<span class="q-part-label">1. Вопрос</span>',
+              '<div class="q-text">' + escapeHtml(task.text) + "</div>",
+            "</div>",
+            '<div class="q-info">',
+              '<span class="q-part-label" style="color:#d8ccff;">2. Что проверяет задание</span>',
+              "<p style=\"margin:0;\">" + escapeHtml(task.info) + "</p>",
+            "</div>",
+            trainerHtml,
+            '<div id="result-' + task.n + '"></div>',
+          "</div>"
+        ].join("");
+      }).join("");
+
+      updateStats();
+      updateSummary();
+    }
+
+    function checkAuto(n) {
+      const task = QUIZZES[currentLevel].find(function (q) { return q.n === n; });
+      if (!task || task.type !== "auto" || savedAnswers[n]) return;
+
+      const input = document.getElementById("input-" + n);
+      const raw = input.value;
+
+      if (!String(raw).trim()) {
+        alert("Введите ответ.");
+        return;
+      }
+
+      const correct = isCorrectAuto(task, raw);
+      savedAnswers[n] = { value: raw, correct: correct };
+
+      input.disabled = true;
+      input.value = raw;
+      input.classList.remove("correct", "wrong");
+      input.classList.add(correct ? "correct" : "wrong");
+
+      const resultBox = document.getElementById("result-" + n);
+      resultBox.innerHTML = [
+        '<div class="result-block ' + (correct ? "correct" : "wrong") + '" role="status" aria-live="polite">',
+          '<div class="verdict ' + (correct ? "correct" : "wrong") + '">' + (correct ? "✅ Правильно!" : "❌ Неправильно.") + "</div>",
+          '<div class="result-row"><strong>Твой ответ:</strong> ' + escapeHtml(raw) + "</div>",
+          '<div class="result-row"><strong>Правильный ответ:</strong> ' + escapeHtml(correctAnswerText(task)) + "</div>",
+          '<div class="result-row"><strong>Пояснение:</strong> ' + escapeHtml(task.explanation) + "</div>",
+          '<div class="source-row"><strong>Источник:</strong> ' + escapeHtml(task.source) + "</div>",
+        "</div>"
+      ].join("");
+
+      updateStats();
+      updateSummary();
+    }
+
+    function chooseEssay(n, idx) {
+      const task = QUIZZES[currentLevel].find(function (q) { return q.n === n; });
+      if (!task || task.type !== "essay" || savedAnswers[n]) return;
+
+      const option = task.options[idx];
+      savedAnswers[n] = { label: option.label, balls: option.balls };
+
+      const buttons = document.querySelectorAll("#options-" + n + " .option");
+      buttons.forEach(function (btn, i) {
+        btn.disabled = true;
+        if (i === idx) btn.classList.add("selected");
+      });
+
+      const resultBox = document.getElementById("result-" + n);
+      resultBox.innerHTML = [
+        '<div class="result-block neutral" role="status" aria-live="polite">',
+          '<div class="verdict neutral">📝 Самопроверка принята</div>',
+          '<div class="result-row"><strong>Твой статус:</strong> ' + escapeHtml(option.label) + "</div>",
+          '<div class="result-row"><strong>Баллов по самопроверке:</strong> ' + option.balls + " / " + task.maxBall + "</div>",
+          '<div class="result-row"><strong>Ориентир / критерий:</strong> ' + escapeHtml(task.explanation) + "</div>",
+          '<div class="source-row"><strong>Источник:</strong> ' + escapeHtml(task.source) + "</div>",
+        "</div>"
+      ].join("");
+
+      updateStats();
+      updateSummary();
+    }
+
+    function getStats() {
+      const quiz = QUIZZES[currentLevel];
+      const L = LEVELS[currentLevel];
+
+      let answered = 0;
+      let autoCorrect = 0;
+      let autoScore = 0;
+      let essaySelfScore = 0;
+      let essayMax = 0;
+
+      quiz.forEach(function (task) {
+        const saved = savedAnswers[task.n];
+        if (!saved) return;
+
+        answered++;
+
+        if (task.type === "auto") {
+          if (saved.correct) {
+            autoCorrect++;
+            autoScore++;
+          }
+        } else {
+          essaySelfScore += saved.balls || 0;
+        }
+
+        if (task.type === "essay") {
+          essayMax += task.maxBall || 0;
+        }
+      });
+
+      return {
+        total: L.total,
+        autoTotal: L.autoTotal,
+        essayTotal: L.essayTotal,
+        answered: answered,
+        autoCorrect: autoCorrect,
+        autoScore: autoScore,
+        essaySelfScore: essaySelfScore,
+        essayMax: essayMax,
+        maxPrimary: L.maxPrimary
+      };
+    }
+
+    function getChecklistProgress() {
+      const inputs = document.querySelectorAll("#checklistUl input");
+      const total = inputs.length;
+      let done = 0;
+      inputs.forEach(function (input) { if (input.checked) done++; });
+      return total ? Math.round((done / total) * 100) : 0;
+    }
+
+    function updateStats() {
+      const stats = getStats();
+      document.getElementById("answeredCount").textContent = stats.answered + "/" + stats.total;
+      document.getElementById("correctCount").textContent = stats.autoCorrect + "/" + stats.autoTotal;
+      document.getElementById("checklistProgress").textContent = getChecklistProgress() + "%";
+      document.getElementById("overall").value = Math.round(((stats.answered / stats.total) * 100 + getChecklistProgress()) / 2);
+    }
+
+    function updateSummary() {
+      const stats = getStats();
+      const summaryBox = document.getElementById("summaryBox");
+
+      if (stats.answered < stats.total) {
+        summaryBox.innerHTML = [
+          '<div class="summary">',
+            '<p style="color:#9aa4c8;margin:0;">Пройдено блоков: <strong>' + stats.answered + "</strong> из " + stats.total + "</p>",
+            '<p style="color:#9aa4c8;margin:8px 0 0 0;">Верных автозаданий: <strong>' + stats.autoCorrect + "</strong> из " + stats.autoTotal + "</p>",
+            currentLevel === "prof"
+              ? '<p style="color:#9aa4c8;margin:8px 0 0 0;">Самопроверка части 2: <strong>' + stats.essaySelfScore + "</strong> из " + stats.essayMax + "</p>"
+              : "",
+            '<p style="color:#9aa4c8;margin:8px 0 0 0;font-size:14px;">Ответь на все блоки, чтобы увидеть итог.</p>',
+          "</div>"
+        ].join("");
+        return;
+      }
+
+      const percent = stats.autoTotal ? Math.round((stats.autoCorrect / stats.autoTotal) * 100) : 0;
+      let verdict = "";
+      if (percent >= 85) verdict = "Отличный результат! База части 1 сильная.";
+      else if (percent >= 60) verdict = "Хорошо, но разбери ошибки по заданиям с кратким ответом.";
+      else verdict = "Нужно плотно проработать базу: вычисления, графики, вероятность, уравнения и геометрию.";
+
+      summaryBox.innerHTML = [
+        '<div class="summary">',
+          '<div class="score">' + stats.autoCorrect + "/" + stats.autoTotal + "</div>",
+          "<p style=\"margin:8px 0;\">" + escapeHtml(verdict) + "</p>",
+          '<p style="color:#9aa4c8;margin:0;">Правильность автозаданий: ' + percent + "%</p>",
+          '<p style="color:#9aa4c8;margin:8px 0 0 0;">Первичных баллов за авточасть: <strong>' + stats.autoScore + "</strong> / " + stats.autoTotal + "</p>",
+          currentLevel === "prof"
+            ? '<p style="color:#9aa4c8;margin:8px 0 0 0;">Самопроверка части 2: <strong>' + stats.essaySelfScore + "</strong> / " + stats.essayMax + "</p>" +
+              '<p class="note" style="margin-top:10px;">Часть 2 оценивается экспертами. Эта цифра — твоя честная самооценка, а не официальный балл.</p>'
+            : '<p class="note" style="margin-top:10px;">Максимальный первичный балл за базовую работу — 21.</p>',
+        "</div>"
+      ].join("");
+    }
+
+    function resetAll() {
+      if (!confirm("Сбросить все ответы и чек-лист?")) return;
+      savedAnswers = {};
+      checklistState = {};
+      renderChecklist();
+      renderPlan();
+      renderQuiz();
+    }
+
+    function copyPhone() {
+      const phone = "89202275676";
+      const status = document.getElementById("copyStatus");
+      const showCopied = function () {
+        status.textContent = "✓ Скопировано";
+        setTimeout(function () { status.textContent = ""; }, 2500);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(phone).then(showCopied).catch(function () {
+          fallbackCopy(phone, showCopied);
+        });
+      } else {
+        fallbackCopy(phone, showCopied);
+      }
+    }
+
+    function fallbackCopy(text, callback) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        document.execCommand("copy");
+        callback();
+      } catch (e) {
+        alert("Не удалось скопировать автоматически. Номер: " + text);
+      }
+
+      document.body.removeChild(textarea);
+    }
+
+    let timerTotal = LEVELS[currentLevel].minutes * 60;
+    let timerRemaining = timerTotal;
+    let timerInterval = null;
+    let timerRunning = false;
+
+    function formatTime(sec) {
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return [h, m, s].map(function (v) { return String(v).padStart(2, "0"); }).join(":");
+    }
+
+    function updateTimerDisplay() {
+      const display = document.getElementById("timerDisplay");
+      const widget = document.getElementById("timerWidget");
+      display.textContent = formatTime(timerRemaining);
+      widget.classList.toggle("warning", timerRemaining <= 300 && timerRemaining > 60);
+      widget.classList.toggle("danger", timerRemaining <= 60);
+    }
+
+    function updateTimerButton() {
+      const btn = document.getElementById("timerToggle");
+      btn.textContent = timerRunning ? "⏸" : "▶";
+      btn.setAttribute("title", timerRunning ? "Пауза таймера" : "Запустить таймер");
+      btn.setAttribute("aria-label", timerRunning ? "Пауза таймера" : "Запустить таймер");
+    }
+
+    function stopTimer() {
+      timerRunning = false;
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      updateTimerButton();
+    }
+
+    function startTimer() {
+      if (timerRunning || timerRemaining <= 0) return;
+      timerRunning = true;
+      timerInterval = setInterval(function () {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          updateTimerDisplay();
+        }
+        if (timerRemaining === 0) {
+          stopTimer();
+          alert("Время вышло!");
+        }
+      }, 1000);
+      updateTimerButton();
+    }
+
+    function toggleTimer() {
+      if (timerRunning) stopTimer();
+      else startTimer();
+    }
+
+    function resetTimer() {
+      stopTimer();
+      timerRemaining = timerTotal;
+      updateTimerDisplay();
+    }
+
+    function updateTimerLabels() {
+      const preset = document.getElementById("timerPreset");
+      const L = LEVELS[currentLevel];
+      const presets = [
+        { seconds: L.minutes * 60, label: L.name + " — " + L.minutes + " мин" },
+        { seconds: 60 * 60, label: "Тренировка — 60 мин" }
+      ];
+
+      preset.innerHTML = presets.map(function (p) {
+        return '<option value="' + p.seconds + '">' + escapeHtml(p.label) + "</option>";
+      }).join("");
+
+      preset.value = String(L.minutes * 60);
+      timerTotal = L.minutes * 60;
+      timerRemaining = timerTotal;
+
+      document.getElementById("timerReset").setAttribute("title", "Сброс таймера");
+      document.getElementById("timerReset").setAttribute("aria-label", "Сброс таймера");
+
+      updateTimerButton();
+      updateTimerDisplay();
+    }
+
+    function setLevel(level) {
+      if (level === currentLevel) return;
+
+      currentLevel = level;
+
+      document.querySelectorAll(".level-option").forEach(function (sp) {
+        sp.classList.toggle("active", sp.dataset.level === level);
+      });
+
+      savedAnswers = {};
+      checklistState = {};
+
+      renderHero();
+      renderStaticSections();
+      renderChecklist();
+      renderPlan();
+      renderQuiz();
+      updateTimerLabels();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      renderHero();
+      renderStaticSections();
+      renderChecklist();
+      renderPlan();
+      renderQuiz();
+      updateTimerLabels();
+      updateTimerDisplay();
+
+      document.getElementById("levelToggle").addEventListener("click", function () {
+        setLevel(currentLevel === "base" ? "prof" : "base");
+      });
+
+      document.getElementById("timerToggle").addEventListener("click", toggleTimer);
+      document.getElementById("timerReset").addEventListener("click", resetTimer);
+
+      document.getElementById("timerPreset").addEventListener("change", function (e) {
+        timerTotal = parseInt(e.target.value, 10);
+        resetTimer();
+      });
+
+      document.getElementById("checklistUl").addEventListener("change", function (e) {
+        if (e.target.matches("input[type='checkbox']")) {
+          const key = e.target.dataset.key;
+          checklistState[key] = e.target.checked;
+          const li = e.target.closest(".check-item");
+          if (li) li.classList.toggle("done", e.target.checked);
+          updateStats();
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+
+        const active = document.activeElement;
+        if (!active || !active.classList.contains("answer-input")) return;
+
+        const match = active.id.match(/^input-(\d+)$/);
+        if (match) {
+          checkAuto(parseInt(match[1], 10));
+        }
+      });
+    });
+  </script>
+</body>
+</html>
